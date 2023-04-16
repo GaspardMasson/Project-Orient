@@ -112,6 +112,35 @@ def dialogue():
     top_movies,ratings,user_accuracy,female_users,age_user, tech_job_users,zip_code_users,field,region = recs.get_recommendations(user,sim_users,n_movies,min_rating,genres,nearest_nyears)
     click.echo(f'Movies (year) Average Rating:\n {top_movies}')
 
+    acc = 0
+    for x in top_movies:
+        acc += x[1]
+
+    import numpy as np
+    click.echo(colored(f"\nThis is the average score of the recommendation : {np.round(acc/3,2)}", Fore.BLUE))
+
+    import pandas as pd
+    item_cols = ['movie_id','movie_title','release_date', 'video_release_date','IMDb_URL','unknown','Action','Adventure','Animation','Childrens','Comedy','Crime','Documentary','Drama','Fantasy','Film-Noir','Horror','Musical','Mystery','Romance','Sci-Fi','Thriller','War' ,'Western']
+    df_item = pd.read_csv('../Data/u.item', sep='|', names=item_cols, encoding='latin-1')
+
+    anneenaissance = str(2023 - age)
+    items = df_item["movie_title"]
+    df_item.dropna(subset=["release_date"], inplace=True)
+    items2 = df_item[df_item["release_date"].str.contains(anneenaissance)]["movie_title"]
+    recommandation = items.sample(n=5)
+    
+    
+    if click.confirm(colored(f"Would you like to have a random selection for you ?", Fore.BLUE)):
+        click.clear()
+        click.echo(colored(f"Here are your random recommandations : \n {recommandation}",Fore.BLACK))
+
+    if click.confirm(colored(f"Would you like to have a random selection of books edited the year you were born ?", Fore.BLUE)):
+        if items2.shape[0] > 1:
+            recommandation2 = items2.sample(n=2)
+            click.clear()
+            click.echo(colored(f"Here are your random recommandations : \n {recommandation2}",Fore.BLACK))
+        else:
+            click.echo(colored(f"We have no data for your born year :(", Fore.RED))
 
     if click.confirm(colored(f'Would you like to view the factors that led to these particular movie recommendations?',Fore.MAGENTA)):
         click.clear()

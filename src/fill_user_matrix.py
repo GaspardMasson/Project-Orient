@@ -75,6 +75,9 @@ df_all_rate.columns = ['user_id', 'item_id','rating']
 MAE = mean_absolute_error(y_true, y_hat)
 RMSE = mean_squared_error(y_true, y_hat)
 
+print("MAE is : ", MAE)
+print("RMSE is : ", RMSE)
+
 #compared to using MAE of 0.737 from SVD, which performed better than KNN at MAE 0.774
 movie_embedding_learnt = model.get_layer(name='Movie-Embedding').get_weights()[0]
 #pd.DataFrame(movie_embedding_learnt).describe()
